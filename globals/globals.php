@@ -1,3 +1,3 @@
 <?php
 require "globals/dd.php";
-require "globals/urlFunctions.php";
+require "globals/routeFunctions.php";
