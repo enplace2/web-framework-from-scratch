@@ -12,8 +12,8 @@ function baseUri(){
     return parse_url($_SERVER["REQUEST_URI"])["path"];
 }
 
-function abort($message){
-    http_response_code(404);
+function abort($message, $code = 404){
+    http_response_code($code);
     echo $message;
     die();
 }

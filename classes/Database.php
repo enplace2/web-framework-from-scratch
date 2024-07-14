@@ -21,10 +21,10 @@ class Database{
         return $db . ":" . $dsnString;
     }
 
-    public function query($query)
+    public function query($query, $bindings)
     {
         $statement = $this->pdo->prepare($query);
-        $statement->execute();
+        $statement->execute($bindings);
 
         return $statement;
     }

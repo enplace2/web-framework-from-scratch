@@ -2,7 +2,9 @@
 
 $routes = [
     "/" => "controllers/index.php",
-    "/about" => "controllers/about.php"
+    "/about" => "controllers/about.php",
+    "/notes" => "controllers/notes.php",
+    "/note" => "controllers/note.php",
 ];
 
 if(array_key_exists(baseUri(), $routes)){
