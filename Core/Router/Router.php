@@ -28,8 +28,35 @@ class Router {
         ];
     }
 
+    public static function resolve(string $requestUri, string $requestMethod)
+    {
+        foreach (self::$routes as $route)
+        {
+            if($route["uri"]=== $requestUri && $requestMethod=== $route["method"]){
+                return self::callAction($route["action"]);
+            }
+        }
+
+        abort("Requested Resource Not Found");
+    }
+
     public static function getRoutes(): array
     {
         return self::$routes;
     }
+    protected static function callAction(array $action)
+    {
+        list ($class, $method) = $action;
+        if(!class_exists($class)) {
+            throw new \Exception("Method $method not found on class $class");
+        }
+
+        if(!method_exists($class, $method)) {
+            throw new \Exception("Method $method not found on class $class");
+        }
+
+        return (new $class())->$method();
+    }
+
+
 }
