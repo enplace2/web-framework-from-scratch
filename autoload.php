@@ -26,12 +26,10 @@ function autoload(string $class, string $prefix, string $base_dir)
 }
 
 spl_autoload_register(function ($class) {
-    var_dump($class);
     autoload($class, 'Core\\', __DIR__ . '/Core/');
 });
 
 spl_autoload_register(function ($class) {
-    var_dump($class);
     autoload($class, 'Controllers\\', __DIR__ . '/controllers/');
 });
 
