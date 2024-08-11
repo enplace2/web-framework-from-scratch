@@ -5,7 +5,7 @@ use Core\Response\Response;
 class Router {
     protected static array $routes = [];
 
-    public static function getRoutes(): array
+    public static function listRoutes(): array
     {
         return self::$routes;
     }
@@ -67,11 +67,18 @@ class Router {
     }
 
     /**
+     * Calls the method of the controller class provided with params.
+     * Handles returning the response via the Response class.
+     * Todo: should move handling of the response class out and into a Kernel class
+     * @param array $action
+     * @param array $params
+     * @return void
      * @throws \Exception
      */
     protected static function callAction(array $action, array $params)
     {
         list ($class, $method) = $action;
+        //Todo: should create specific exception classes for these
         if(!class_exists($class)) {
             throw new \Exception("Class $class not found");
         }
