@@ -1,9 +1,11 @@
 <?php
 namespace Core\Router;
+use Core\Response\Response;
+
 class Router {
     protected static array $routes = [];
 
-    public static function getRoutes(): array
+    public static function listRoutes(): array
     {
         return self::$routes;
     }
@@ -32,6 +34,9 @@ class Router {
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function resolve(string $requestUri, string $requestMethod)
     {
         foreach (self::$routes as $route) {
@@ -39,7 +44,7 @@ class Router {
 
             if ($requestMethod === $route["method"] && self::match($route["uri"], $requestUri, $params)) {
                 // Pass the extracted parameters to callAction
-                return self::callAction($route["action"], $params);
+                self::callAction($route["action"], $params);
             }
         }
 
@@ -60,9 +65,20 @@ class Router {
 
         return false;
     }
+
+    /**
+     * Calls the method of the controller class provided with params.
+     * Handles returning the response via the Response class.
+     * Todo: should move handling of the response class out and into a Kernel class
+     * @param array $action
+     * @param array $params
+     * @return void
+     * @throws \Exception
+     */
     protected static function callAction(array $action, array $params)
     {
         list ($class, $method) = $action;
+        //Todo: should create specific exception classes for these
         if(!class_exists($class)) {
             throw new \Exception("Class $class not found");
         }
@@ -71,7 +87,15 @@ class Router {
             throw new \Exception("Method $method not found on class $class");
         }
 
-        return (new $class())->$method(...$params);
+        $response =  (new $class())->$method(...$params);
+
+        if ($response instanceof Response) {
+            $response->send();
+        } elseif (is_string($response)) {
+            response($response)->send();
+        } else {
+            response()->json($response)->send();
+        }
     }
 
 
