@@ -1,5 +1,7 @@
 <?php
 namespace Core\Router;
+use Core\Response\Response;
+
 class Router {
     protected static array $routes = [];
 
@@ -32,6 +34,9 @@ class Router {
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function resolve(string $requestUri, string $requestMethod)
     {
         foreach (self::$routes as $route) {
@@ -39,7 +44,7 @@ class Router {
 
             if ($requestMethod === $route["method"] && self::match($route["uri"], $requestUri, $params)) {
                 // Pass the extracted parameters to callAction
-                return self::callAction($route["action"], $params);
+                self::callAction($route["action"], $params);
             }
         }
 
@@ -60,6 +65,10 @@ class Router {
 
         return false;
     }
+
+    /**
+     * @throws \Exception
+     */
     protected static function callAction(array $action, array $params)
     {
         list ($class, $method) = $action;
@@ -71,7 +80,15 @@ class Router {
             throw new \Exception("Method $method not found on class $class");
         }
 
-        return (new $class())->$method(...$params);
+        $response =  (new $class())->$method(...$params);
+
+        if ($response instanceof Response) {
+            $response->send();
+        } elseif (is_string($response)) {
+            response($response)->send();
+        } else {
+            response()->json($response)->send();
+        }
     }
 
 
