@@ -64,7 +64,7 @@ class Router {
     {
         list ($class, $method) = $action;
         if(!class_exists($class)) {
-            throw new \Exception("Method $method not found on class $class");
+            throw new \Exception("Class $class not found");
         }
 
         if(!method_exists($class, $method)) {
