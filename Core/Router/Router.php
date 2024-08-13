@@ -68,7 +68,6 @@ class Router {
 
     /**
      * Calls the method of the controller class provided with params.
-     * Handles returning the response via the Response class.
      * @param array $action
      * @param array $params
      * @return mixed
