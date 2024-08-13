@@ -69,7 +69,6 @@ class Router {
     /**
      * Calls the method of the controller class provided with params.
      * Handles returning the response via the Response class.
-     * Todo: should move handling of the response class out and into a Kernel class
      * @param array $action
      * @param array $params
      * @return mixed
