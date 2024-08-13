@@ -37,11 +37,19 @@ class TestController{
             ->header('Content-Type', 'text/plain');
     }
 
-    public function arrayResponse()
+    public function assocArrayResponse()
     {
         return [
             'name' => 'John',
             'age' => 30,
+        ];
+    }
+
+    public function arrayResponse()
+    {
+        return [
+            'John',
+            30,
         ];
     }
 
