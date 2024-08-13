@@ -11,5 +11,6 @@ Router::get("/hello/{id}/{id2}", [TestController::class, 'testWildCard2']);
 Router::get('/string', [TestController::class, 'stringResponse']);
 Router::get('/json', [TestController::class, 'jsonResponse']);
 Router::get('/custom', [TestController::class, 'customResponse']);
+Router::get('/assoc-array', [TestController::class, 'assocArrayResponse']);
 Router::get('/array', [TestController::class, 'arrayResponse']);
 Router::get('/model', [TestController::class, 'modelResponse']);

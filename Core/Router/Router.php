@@ -44,7 +44,7 @@ class Router {
 
             if ($requestMethod === $route["method"] && self::match($route["uri"], $requestUri, $params)) {
                 // Pass the extracted parameters to callAction
-                self::callAction($route["action"], $params);
+                return self::callAction($route["action"], $params);
             }
         }
 
@@ -72,7 +72,7 @@ class Router {
      * Todo: should move handling of the response class out and into a Kernel class
      * @param array $action
      * @param array $params
-     * @return void
+     * @return mixed
      * @throws \Exception
      */
     protected static function callAction(array $action, array $params)
@@ -87,15 +87,7 @@ class Router {
             throw new \Exception("Method $method not found on class $class");
         }
 
-        $response =  (new $class())->$method(...$params);
-
-        if ($response instanceof Response) {
-            $response->send();
-        } elseif (is_string($response)) {
-            response($response)->send();
-        } else {
-            response()->json($response)->send();
-        }
+        return (new $class())->$method(...$params);
     }
 
 

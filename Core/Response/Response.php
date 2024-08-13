@@ -14,6 +14,16 @@ class Response
         $this->headers = $headers;
     }
 
+    public static function make($data): Response
+    {
+        if ($data instanceof Response) {
+            return $data;
+        } elseif (is_string($data)) {
+            return response($data);
+        } else {
+            return response()->json($data);
+        }
+    }
     /**
      * Sets the header value on the Response instance for a given key value pair
      * @param string $key
