@@ -6,8 +6,6 @@ require "routes/routes.php";
 use Core\Kernel\Kernel;
 use Core\Database\Database;
 
-$dsn = "mysql:host=127.0.0.1;port=3306;dbname=web_application_framework_demo;charset=utf8mb4";
-$pdo = new PDO($dsn, 'root');
 $configs = [
     'driver'   => 'mysql',
     'host'     => '127.0.0.1',
