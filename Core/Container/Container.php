@@ -3,6 +3,7 @@
 namespace Core\Container;
 
 use Closure;
+use Core\ServiceProvider\ServiceProviderInterface;
 
 class Container
 {
@@ -48,5 +49,18 @@ class Container
             return $concrete();
         }
         throw new \Exception("Instantiation failed. Closure provided for $abstract is not callable");
+    }
+
+    public function registerServiceProviders(array $serviceProviders): void
+    {
+        foreach ($serviceProviders as $serviceProvider) {
+            $serviceProvider = new $serviceProvider($this);
+            $this->register($serviceProvider);
+        }
+
+    }
+    protected function register(ServiceProviderInterface $serviceProvider): void
+    {
+        $serviceProvider->register();
     }
 }

@@ -9,9 +9,7 @@ $serviceProviders = [
     DatabaseServiceProvider::class
 ];
 
-foreach ($serviceProviders as $serviceProvider) {
-    (new $serviceProvider($container))->register();
-}
+$container->registerServiceProviders($serviceProviders);
 
 
 return $container;
