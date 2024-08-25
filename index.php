@@ -1,7 +1,7 @@
 <?php
-require_once "globals/globals.php";
+require_once "Core/globals/globals.php";
 require_once "autoload.php";
-require_once "routes/routes.php";
+require_once "app/routes/routes.php";
 
 use Core\Kernel\Kernel;
 
