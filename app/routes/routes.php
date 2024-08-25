@@ -1,6 +1,7 @@
 <?php
 
-use Controllers\TestController;
+use app\Controllers\PostController;
+use app\Controllers\TestController;
 use Core\Router\Router;
 
 Router::get("/", [TestController::class, 'test']);
@@ -14,3 +15,5 @@ Router::get('/custom', [TestController::class, 'customResponse']);
 Router::get('/assoc-array', [TestController::class, 'assocArrayResponse']);
 Router::get('/array', [TestController::class, 'arrayResponse']);
 Router::get('/model', [TestController::class, 'modelResponse']);
+Router::get('/posts', [PostController::class, 'index']);
+Router::get('/posts/{id}', [PostController::class, 'show']);

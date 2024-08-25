@@ -1,36 +1,20 @@
 <?php
 
-function autoload(string $class, string $prefix, string $base_dir)
+function autoload(string $class)
 {
-    // Get the length of the namespace prefix
-    $len = strlen($prefix);
+    // Base directory for the application
+    $base_dir = __DIR__ . '/';
 
-    // Does the class use the namespace prefix?
-    if (strncmp($prefix, $class, $len) !== 0) {
-        // no, move to the next registered autoloader
-        return;
-    }
-
-    // Get the relative class name
-    $relative_class = substr($class, $len);
-
-    // Replace the namespace prefix with the base directory, replace namespace
-    // separators with directory separators in the relative class name, append
-    // with .php
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    // Convert the namespace to a file path
+    $file = $base_dir . str_replace('\\', '/', $class) . '.php';
 
     // If the file exists, require it
     if (file_exists($file)) {
         require $file;
+        return true;
     }
+
+    return false;
 }
 
-spl_autoload_register(function ($class) {
-    autoload($class, 'Core\\', __DIR__ . '/Core/');
-});
-
-spl_autoload_register(function ($class) {
-    autoload($class, 'Controllers\\', __DIR__ . '/controllers/');
-});
-
-
+spl_autoload_register('autoload');
