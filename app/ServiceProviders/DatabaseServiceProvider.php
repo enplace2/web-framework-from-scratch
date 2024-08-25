@@ -1,8 +1,9 @@
 <?php
 
-namespace ServiceProviders;
+namespace app\ServiceProviders;
 use Core\Database\Database;
 use Core\ServiceProvider\ServiceProvider;
+
 class DatabaseServiceProvider extends ServiceProvider
 {
 

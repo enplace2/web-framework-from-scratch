@@ -1,7 +1,7 @@
 <?php
 
+use app\ServiceProviders\DatabaseServiceProvider;
 use Core\Container\Container;
-use ServiceProviders\DatabaseServiceProvider;
 
 $container = new Container();
 
