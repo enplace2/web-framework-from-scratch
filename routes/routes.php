@@ -1,7 +1,7 @@
 <?php
 
-use Controllers\PostController;
-use Controllers\TestController;
+use app\Controllers\PostController;
+use app\Controllers\TestController;
 use Core\Router\Router;
 
 Router::get("/", [TestController::class, 'test']);
