@@ -3,6 +3,7 @@
 namespace Core\Container;
 
 use Closure;
+use Core\ServiceProvider\ServiceProvider;
 use Core\ServiceProvider\ServiceProviderInterface;
 
 class Container
@@ -53,5 +54,12 @@ class Container
     protected function register(ServiceProviderInterface $serviceProvider): void
     {
         $serviceProvider->register();
+    }
+
+    public function bootServiceProviders(array $serviceProviders){
+        foreach ($serviceProviders as $serviceProvider){
+            $serviceProvider = new $serviceProvider($this);
+            $serviceProvider->boot();
+        }
     }
 }
