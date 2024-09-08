@@ -28,7 +28,6 @@ class Kernel
     {
         $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $method = $_SERVER["REQUEST_METHOD"];
-
         $this->response = Response::make(Router::resolve($uri, $method));
         return $this;
     }

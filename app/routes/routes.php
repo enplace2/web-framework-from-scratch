@@ -1,9 +1,11 @@
 <?php
 
+use app\Controllers\AuthenticationController;
 use app\Controllers\PostController;
 use app\Controllers\TestController;
 use Core\Router\Router;
 
+Router::post('/register', [AuthenticationController::class, 'register']);
 Router::get("/", [TestController::class, 'test']);
 Router::get("/hello", [TestController::class, 'test2']);
 Router::get("/hello/{id}", [TestController::class, 'testWildCard']);
@@ -17,3 +19,6 @@ Router::get('/array', [TestController::class, 'arrayResponse']);
 Router::get('/model', [TestController::class, 'modelResponse']);
 Router::get('/posts', [PostController::class, 'index']);
 Router::get('/posts/{id}', [PostController::class, 'show']);
+Router::get('/posts/{id}', [PostController::class, 'show']);
+Router::get('/posts/{id}', [PostController::class, 'show']);
+
