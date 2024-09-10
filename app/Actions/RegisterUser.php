@@ -20,7 +20,15 @@ class RegisterUser
     public function execute()
     {
         $this->validate();
-        return User::create($this->username, $this->email, $this->password);
+        $user =  User::create($this->username, $this->email, $this->password);
+
+        if($user){
+            $_SESSION['user_id'] = $user["id"];
+        }
+        if(!$user){
+            throw new \Exception("Registration Failed");
+        }
+        return $user;
     }
     protected function validate(){
 
