@@ -44,4 +44,19 @@ class AuthenticationController
             'user'      => $user,
         ]);
     }
+
+
+    public function logout()
+    {
+
+        //Delete the session cookies
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
+
+
+        // Destroy the session
+        session_destroy();
+
+        return new Response(['message' => 'Logout successful'], 200);
+    }
 }
