@@ -6,6 +6,7 @@ use app\Controllers\TestController;
 use Core\Router\Router;
 
 Router::post('/register', [AuthenticationController::class, 'register']);
+Router::post('/login', [AuthenticationController::class, 'login']);
 Router::get("/", [TestController::class, 'test']);
 Router::get("/hello", [TestController::class, 'test2']);
 Router::get("/hello/{id}", [TestController::class, 'testWildCard']);
