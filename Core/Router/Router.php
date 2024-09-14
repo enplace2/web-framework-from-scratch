@@ -13,6 +13,10 @@ class Router {
     {
         self::addRoute("GET", $uri, $action);
     }
+    public static function post(string $uri, array $action) :void
+    {
+        self::addRoute("POST", $uri, $action);
+    }
     public static function put(string $uri, array $action):void
     {
         self::addRoute("PUT", $uri, $action);
