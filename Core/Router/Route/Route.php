@@ -20,7 +20,7 @@ class Route
         return $this;
     }
 
-    public function addMiddleware(string $middlewareClass)
+    public function middleware(string $middlewareClass)
     {
         $this->middleware[] = $middlewareClass;
         return $this;
@@ -30,7 +30,7 @@ class Route
         $this->excludedMiddleware = $middlewareClasses;
         return $this;
     }
-    public function excludeMiddleware(string $middlewareClass)
+    public function withoutMiddleware(string $middlewareClass)
     {
         $this->excludedMiddleware[] = $middlewareClass;
         return $this;
