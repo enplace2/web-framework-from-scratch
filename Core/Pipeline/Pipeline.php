@@ -1,5 +1,7 @@
 <?php
+
 namespace Core\Pipeline;
+
 use Closure;
 
 class Pipeline
@@ -24,7 +26,8 @@ class Pipeline
     public function send(): static
     {
         $stack = $this->buildPipeline();
-        $this->result =  $stack();
+        $this->result = $stack();
+
         return $this;
     }
 
@@ -33,7 +36,7 @@ class Pipeline
         $stack = $this->target;
         foreach (array_reverse($this->pipes) as $pipe) {
             $stack = function () use ($pipe, $stack) {
-                (new $pipe())->handle($stack);
+                return (new $pipe())->handle($stack);
             };
         }
         return $stack;
