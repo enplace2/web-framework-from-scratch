@@ -28,7 +28,7 @@ class Pipeline
         return $this;
     }
 
-    public function buildPipeline(): Closure
+    protected function buildPipeline(): Closure
     {
         $stack = $this->target;
         foreach (array_reverse($this->pipes) as $pipe) {
