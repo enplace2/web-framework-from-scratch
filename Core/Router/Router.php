@@ -1,36 +1,44 @@
 <?php
+
 namespace Core\Router;
 
 use Core\Router\Route\Route;
 
-class Router {
+class Router
+{
     protected static array $routes = [];
 
     public static function listRoutes(): array
     {
         return static::$routes;
     }
-    public static function get(string $uri, array $action) : Route
+
+    public static function get(string $uri, array $action): Route
     {
         return static::addRoute("GET", $uri, $action);
     }
-    public static function post(string $uri, array $action) : Route
+
+    public static function post(string $uri, array $action): Route
     {
         return static::addRoute("POST", $uri, $action);
     }
+
     public static function put(string $uri, array $action): Route
     {
         return static::addRoute("PUT", $uri, $action);
     }
-    public static function patch(string $uri, array $action) : Route
+
+    public static function patch(string $uri, array $action): Route
     {
         return static::addRoute("PATCH", $uri, $action);
     }
-    public static function delete(string $uri, array $action) : Route
+
+    public static function delete(string $uri, array $action): Route
     {
         return static::addRoute("DELETE", $uri, $action);
     }
-    public static function addRoute(string $method, string $uri, array $action) :Route
+
+    public static function addRoute(string $method, string $uri, array $action): Route
     {
         $route = new Route(
             method: $method,
@@ -83,11 +91,11 @@ class Router {
     {
         list ($class, $method) = $action;
         //Todo: should create specific exception classes for these
-        if(!class_exists($class)) {
+        if (!class_exists($class)) {
             throw new \Exception("Class $class not found");
         }
 
-        if(!method_exists($class, $method)) {
+        if (!method_exists($class, $method)) {
             throw new \Exception("Method $method not found on class $class");
         }
 
