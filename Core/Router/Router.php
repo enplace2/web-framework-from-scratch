@@ -8,27 +8,27 @@ class Router {
 
     public static function listRoutes(): array
     {
-        return self::$routes;
+        return static::$routes;
     }
     public static function get(string $uri, array $action) : Route
     {
-        return self::addRoute("GET", $uri, $action);
+        return static::addRoute("GET", $uri, $action);
     }
     public static function post(string $uri, array $action) : Route
     {
-        return self::addRoute("POST", $uri, $action);
+        return static::addRoute("POST", $uri, $action);
     }
     public static function put(string $uri, array $action): Route
     {
-        return self::addRoute("PUT", $uri, $action);
+        return static::addRoute("PUT", $uri, $action);
     }
     public static function patch(string $uri, array $action) : Route
     {
-        return self::addRoute("PATCH", $uri, $action);
+        return static::addRoute("PATCH", $uri, $action);
     }
     public static function delete(string $uri, array $action) : Route
     {
-        return self::addRoute("DELETE", $uri, $action);
+        return static::addRoute("DELETE", $uri, $action);
     }
     public static function addRoute(string $method, string $uri, array $action) :Route
     {
@@ -37,7 +37,7 @@ class Router {
             uri: $uri,
             action: $action,
         );
-        self::$routes[$method][] = $route;
+        static::$routes[$method][] = $route;
         return $route;
     }
 
@@ -46,11 +46,11 @@ class Router {
      */
     public static function resolve(string $requestUri, string $requestMethod)
     {
-        foreach (self::$routes[$requestMethod] as $route) {
+        foreach (static::$routes[$requestMethod] as $route) {
             $params = [];
-            if (self::match($route->uri, $requestUri, $params)) {
+            if (static::match($route->uri, $requestUri, $params)) {
                 // Pass the extracted parameters to callAction
-                return self::callAction($route->action, $params);
+                return static::callAction($route->action, $params);
             }
         }
 
