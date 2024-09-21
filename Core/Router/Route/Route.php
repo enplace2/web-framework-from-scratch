@@ -2,6 +2,8 @@
 
 namespace Core\Router\Route;
 
+use Core\Middleware\MiddlewareInterface;
+
 class Route
 {
     public function __construct(
@@ -13,26 +15,31 @@ class Route
     )
     {
     }
-
-    public function setMiddleware(array $middlewareClasses)
+    /**
+     * Add middleware to the route.
+     *
+     * @param array<string<MiddlewareInterface>> $middlewareClasses
+     * @return static
+     */
+    public function middleware(array $middlewareClasses): static
     {
-        $this->middleware = $middlewareClasses;
+        foreach ($middlewareClasses as $middlewareClass) {
+            $this->middleware[] = $middlewareClass;
+        }
         return $this;
     }
 
-    public function middleware(string $middlewareClass)
+    /**
+     * Add middleware to be excluded from the route.
+     *
+     * @param array<string<MiddlewareInterface>> $middlewareClasses
+     * @return static
+     */
+    public function withoutMiddleware(array $middlewareClasses): static
     {
-        $this->middleware[] = $middlewareClass;
-        return $this;
-    }
-
-    public function setExcludedMiddleware(array $middlewareClasses){
-        $this->excludedMiddleware = $middlewareClasses;
-        return $this;
-    }
-    public function withoutMiddleware(string $middlewareClass)
-    {
-        $this->excludedMiddleware[] = $middlewareClass;
+        foreach ($middlewareClasses as $middlewareClass) {
+            $this->excludedMiddleware[] = $middlewareClass;
+        }
         return $this;
     }
 }
