@@ -1,6 +1,10 @@
 <?php
 namespace Core\Middleware;
-abstract class Middleware implements MiddlewareInterface
+
+
+use Core\Pipeline\Pipe\PipeInterface;
+
+abstract class Middleware implements PipeInterface
 {
 
 }

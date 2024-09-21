@@ -10,6 +10,5 @@ use Core\Router\Router;
 //dd(Router::listRoutes());
 
 $container = require_once "./app/bootstrap.php";
-
 $kernel = new Kernel($container);
 $kernel->handle()->send();
