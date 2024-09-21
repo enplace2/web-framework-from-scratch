@@ -1,6 +1,8 @@
 <?php
 namespace Core\Router;
 
+use Core\Router\Route\Route;
+
 class Router {
     protected static array $routes = [];
 
@@ -8,33 +10,35 @@ class Router {
     {
         return self::$routes;
     }
-    public static function get(string $uri, array $action) :void
+    public static function get(string $uri, array $action) : Route
     {
-        self::addRoute("GET", $uri, $action);
+        return self::addRoute("GET", $uri, $action);
     }
-    public static function post(string $uri, array $action) :void
+    public static function post(string $uri, array $action) : Route
     {
-        self::addRoute("POST", $uri, $action);
+        return self::addRoute("POST", $uri, $action);
     }
-    public static function put(string $uri, array $action):void
+    public static function put(string $uri, array $action): Route
     {
-        self::addRoute("PUT", $uri, $action);
+        return self::addRoute("PUT", $uri, $action);
     }
-    public static function patch(string $uri, array $action) :void
+    public static function patch(string $uri, array $action) : Route
     {
-        self::addRoute("PATCH", $uri, $action);
+        return self::addRoute("PATCH", $uri, $action);
     }
-    public static function delete(string $uri, array $action) :void
+    public static function delete(string $uri, array $action) : Route
     {
-        self::addRoute("DELETE", $uri, $action);
+        return self::addRoute("DELETE", $uri, $action);
     }
-    public static function addRoute(string $method, string $uri, array $action) :void
+    public static function addRoute(string $method, string $uri, array $action) :Route
     {
-        self::$routes[] =[
-            "method" => $method,
-            "uri" => $uri,
-            "action" => $action,
-        ];
+        $route = new Route(
+            method: $method,
+            uri: $uri,
+            action: $action,
+        );
+        self::$routes[$method][] = $route;
+        return $route;
     }
 
     /**
@@ -42,12 +46,11 @@ class Router {
      */
     public static function resolve(string $requestUri, string $requestMethod)
     {
-        foreach (self::$routes as $route) {
+        foreach (self::$routes[$requestMethod] as $route) {
             $params = [];
-
-            if ($requestMethod === $route["method"] && self::match($route["uri"], $requestUri, $params)) {
+            if (self::match($route->uri, $requestUri, $params)) {
                 // Pass the extracted parameters to callAction
-                return self::callAction($route["action"], $params);
+                return self::callAction($route->action, $params);
             }
         }
 
