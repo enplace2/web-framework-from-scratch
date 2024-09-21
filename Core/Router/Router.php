@@ -1,6 +1,5 @@
 <?php
 namespace Core\Router;
-use Core\Response\Response;
 
 class Router {
     protected static array $routes = [];
