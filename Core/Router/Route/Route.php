@@ -4,6 +4,7 @@ namespace Core\Router\Route;
 
 use Closure;
 use Core\Pipeline\Pipe\PipeInterface;
+use Core\Response\Response;
 
 class Route
 {
@@ -69,9 +70,10 @@ class Route
         if (!method_exists($class, $method)) {
             throw new \Exception("Method $method not found on class $class");
         }
+        $params = $this->params;
 
-        return function () use ($class, $method){
-            return (new $class())->$method(...$this->params);
-    };
+        return function () use ($class, $method, $params) {
+            return Response::make((new $class())->$method(...$params));
+        };
     }
 }
