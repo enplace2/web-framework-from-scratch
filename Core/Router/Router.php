@@ -2,6 +2,7 @@
 
 namespace Core\Router;
 
+use Closure;
 use Core\Router\Route\Route;
 
 class Router
@@ -52,13 +53,12 @@ class Router
     /**
      * @throws \Exception
      */
-    public static function resolve(string $requestUri, string $requestMethod)
+    public static function resolve(string $requestUri, string $requestMethod): Route
     {
         foreach (static::$routes[$requestMethod] as $route) {
             $params = [];
             if (static::match($route->uri, $requestUri, $params)) {
-                // Pass the extracted parameters to callAction
-                return static::callAction($route->action, $params);
+                return $route->setParams($params);
             }
         }
 
@@ -80,27 +80,6 @@ class Router
         return false;
     }
 
-    /**
-     * Calls the method of the controller class provided with params.
-     * @param array $action
-     * @param array $params
-     * @return mixed
-     * @throws \Exception
-     */
-    protected static function callAction(array $action, array $params)
-    {
-        list ($class, $method) = $action;
-        //Todo: should create specific exception classes for these
-        if (!class_exists($class)) {
-            throw new \Exception("Class $class not found");
-        }
-
-        if (!method_exists($class, $method)) {
-            throw new \Exception("Method $method not found on class $class");
-        }
-
-        return (new $class())->$method(...$params);
-    }
 
 
 }
