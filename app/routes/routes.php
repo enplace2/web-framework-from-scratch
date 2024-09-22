@@ -2,8 +2,14 @@
 
 use app\Controllers\PostController;
 use app\Controllers\TestController;
+use app\Middleware\TestMiddleware;
 use Core\Router\Router;
-Router::get("/", [TestController::class, 'test']);
+
+
+
+Router::get("/", [TestController::class, 'test'])
+    ->middleware([TestMiddleware::class])
+    ->withoutMiddleware([TestMiddleware::class]);
 Router::get("/hello", [TestController::class, 'test2']);
 Router::get("/hello/{id}", [TestController::class, 'testWildCard']);
 Router::get("/hello/{id}/{id2}", [TestController::class, 'testWildCard2']);
