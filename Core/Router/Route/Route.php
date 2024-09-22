@@ -76,4 +76,9 @@ class Route
             return Response::make((new $class())->$method(...$params));
         };
     }
+
+    public function gatherMiddleware(): array
+    {
+        return array_diff($this->middleware, $this->excludedMiddleware);
+    }
 }

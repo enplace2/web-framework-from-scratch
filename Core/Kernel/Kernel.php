@@ -32,7 +32,7 @@ class Kernel
         $route = Router::resolve($uri, $method);
 
         (new Pipeline())->run($route->getAction())
-            ->through($route->middleware)
+            ->through($route->gatherMiddleware())
             ->send()
             ->then($this->setResponse());
 
