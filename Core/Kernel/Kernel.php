@@ -10,9 +10,6 @@ use Core\Router\Router;
 
 class Kernel
 {
-    // make a request instance
-    // handle the request
-    // send the request
     protected Response $response;
 
     protected static Container $container;
@@ -22,7 +19,7 @@ class Kernel
         self::$container = $container;
     }
 
-    public static function container()
+    public static function container(): Container
     {
         return self::$container;
     }
