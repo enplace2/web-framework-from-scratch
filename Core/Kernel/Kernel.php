@@ -13,7 +13,7 @@ class Kernel
     // make a request instance
     // handle the request
     // send the request
-    protected $response;
+    protected Response $response;
 
     protected static Container $container;
 
@@ -31,6 +31,7 @@ class Kernel
     {
         $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $method = $_SERVER["REQUEST_METHOD"];
+
         $route = Router::resolve($uri, $method);
 
         (new Pipeline())->run($route->getAction())
@@ -40,6 +41,7 @@ class Kernel
 
         return $this;
     }
+
     public function send(): void
     {
         $this->response->send();
@@ -47,8 +49,8 @@ class Kernel
 
     protected function setResponse(): Closure
     {
-        return function ($responseValue) {
-            $this->response = Response::make($responseValue);
+        return function (Response $response) {
+            $this->response = $response;
         };
     }
 
