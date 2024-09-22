@@ -60,4 +60,9 @@ class Response
             $this->content = $content;
         }
     }
+
+    public function content()
+    {
+        return $this->content;
+    }
 }

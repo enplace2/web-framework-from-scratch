@@ -3,14 +3,14 @@
 namespace app\Middleware;
 use Core\Middleware\Middleware;
 use Closure;
-class TestMiddleware extends Middleware
+class TestMiddleware2 extends Middleware
 {
 
     public function handle(Closure $next)
     {
-        dump("TestMiddleWare Before");
+        dump("TestMiddleWare2 Before");
         $response = $next();
-        dump("TestMiddleWare After");
+        dump("TestMiddleWare2 After");
         return $response;
     }
 }

@@ -8,14 +8,15 @@ use Core\Response\Response;
 
 class Route
 {
-    public array $middleware = [];
-    public array $excludedMiddleware = [];
+
     protected array $params = [];
 
     public function __construct(
         public string $method,
         public string $uri,
         public array  $action,
+        public array  $middleware = [],
+        public array  $withoutMiddleware = [],
     )
     {
     }
@@ -43,7 +44,7 @@ class Route
     public function withoutMiddleware(array $middlewareClasses): static
     {
         foreach ($middlewareClasses as $middlewareClass) {
-            $this->excludedMiddleware[] = $middlewareClass;
+            $this->withoutMiddleware[] = $middlewareClass;
         }
         return $this;
     }
@@ -79,6 +80,6 @@ class Route
 
     public function gatherMiddleware(): array
     {
-        return array_diff($this->middleware, $this->excludedMiddleware);
+        return array_unique(array_diff($this->middleware, $this->withoutMiddleware));
     }
 }

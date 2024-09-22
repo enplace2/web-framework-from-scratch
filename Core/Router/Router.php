@@ -4,10 +4,17 @@ namespace Core\Router;
 
 use Closure;
 use Core\Router\Route\Route;
+use Core\Router\RouteGroup\RouteGroup;
 
 class Router
 {
     protected static array $routes = [];
+
+    /**
+     * Array of RouteGroup instances.
+     * @var array<RouteGroup> $routeGroups
+     */
+    protected static array $routeGroups = [];
 
     public static function listRoutes(): array
     {
@@ -46,6 +53,13 @@ class Router
             uri: $uri,
             action: $action,
         );
+
+
+        foreach (static::$routeGroups as $routeGroup){
+            /** @var RouteGroup $routeGroup */
+            $route->middleware($routeGroup->middleware);
+            $route->withoutMiddleware($routeGroup->withoutMiddleware);
+        }
         static::$routes[$method][] = $route;
         return $route;
     }
@@ -55,6 +69,8 @@ class Router
      */
     public static function resolve(string $requestUri, string $requestMethod): Route
     {
+        if(!isset(static::$routes[$requestMethod])) abort("Requested Resource Not Found");
+
         foreach (static::$routes[$requestMethod] as $route) {
             $params = [];
             if (static::match($route->uri, $requestUri, $params)) {
@@ -80,6 +96,15 @@ class Router
         return false;
     }
 
+    public static function group(Closure $group): RouteGroup
+    {
+        $createGroup = function() use($group){
+            $group();
+            array_pop(static::$routeGroups);
+        };
+        static::$routeGroups[] = new RouteGroup($createGroup);
+        return end(static::$routeGroups);
+    }
 
 
 }
