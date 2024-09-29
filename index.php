@@ -5,9 +5,6 @@ require_once "app/routes/routes.php";
 require_once "app/routes/auth.php";
 
 use Core\Kernel\Kernel;
-use Core\Router\Router;
-
-//dd(Router::listRoutes());
 
 $container = require_once "./app/bootstrap.php";
 $kernel = new Kernel($container);

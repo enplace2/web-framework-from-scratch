@@ -54,7 +54,8 @@ class Router
             action: $action,
         );
 
-
+        // Loop through the route groups currently in the stack and apply
+        // each group's middleware to the route.
         foreach (static::$routeGroups as $routeGroup){
             /** @var RouteGroup $routeGroup */
             $route->middleware($routeGroup->middleware);
