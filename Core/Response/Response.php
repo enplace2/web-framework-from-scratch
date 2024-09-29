@@ -20,9 +20,9 @@ class Response
         if ($data instanceof Response) {
             return $data;
         } elseif (is_string($data)) {
-            return new self($data);
+            return new static($data);
         } else {
-            return self::json($data);
+            return static::json($data);
         }
     }
 
@@ -51,7 +51,7 @@ class Response
         return $instance;
     }
 
-    protected function setContent($content): void
+    public function setContent($content): void
     {
         if (is_array($content) || is_object($content)) {
             $this->content = json_encode($content);
@@ -59,5 +59,10 @@ class Response
         } else {
             $this->content = $content;
         }
+    }
+
+    public function content()
+    {
+        return $this->content;
     }
 }

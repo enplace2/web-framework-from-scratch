@@ -1,54 +1,81 @@
 <?php
-namespace Core\Router;
-use Core\Response\Response;
 
-class Router {
+namespace Core\Router;
+
+use Closure;
+use Core\Router\Route\Route;
+use Core\Router\RouteGroup\RouteGroup;
+
+class Router
+{
     protected static array $routes = [];
+
+    /**
+     * Array of RouteGroup instances.
+     * @var array<RouteGroup> $routeGroups
+     */
+    protected static array $routeGroups = [];
 
     public static function listRoutes(): array
     {
-        return self::$routes;
+        return static::$routes;
     }
-    public static function get(string $uri, array $action) :void
+
+    public static function get(string $uri, array $action): Route
     {
-        self::addRoute("GET", $uri, $action);
+        return static::addRoute("GET", $uri, $action);
     }
-    public static function post(string $uri, array $action) :void
+
+    public static function post(string $uri, array $action): Route
     {
-        self::addRoute("POST", $uri, $action);
+        return static::addRoute("POST", $uri, $action);
     }
-    public static function put(string $uri, array $action):void
+
+    public static function put(string $uri, array $action): Route
     {
-        self::addRoute("PUT", $uri, $action);
+        return static::addRoute("PUT", $uri, $action);
     }
-    public static function patch(string $uri, array $action) :void
+
+    public static function patch(string $uri, array $action): Route
     {
-        self::addRoute("PATCH", $uri, $action);
+        return static::addRoute("PATCH", $uri, $action);
     }
-    public static function delete(string $uri, array $action) :void
+
+    public static function delete(string $uri, array $action): Route
     {
-        self::addRoute("DELETE", $uri, $action);
+        return static::addRoute("DELETE", $uri, $action);
     }
-    public static function addRoute(string $method, string $uri, array $action) :void
+
+    public static function addRoute(string $method, string $uri, array $action): Route
     {
-        self::$routes[] =[
-            "method" => $method,
-            "uri" => $uri,
-            "action" => $action,
-        ];
+        $route = new Route(
+            method: $method,
+            uri: $uri,
+            action: $action,
+        );
+
+        // Loop through the route groups currently in the stack and apply
+        // each group's middleware to the route.
+        foreach (static::$routeGroups as $routeGroup){
+            /** @var RouteGroup $routeGroup */
+            $route->middleware($routeGroup->middleware);
+            $route->withoutMiddleware($routeGroup->withoutMiddleware);
+        }
+        static::$routes[$method][] = $route;
+        return $route;
     }
 
     /**
      * @throws \Exception
      */
-    public static function resolve(string $requestUri, string $requestMethod)
+    public static function resolve(string $requestUri, string $requestMethod): Route
     {
-        foreach (self::$routes as $route) {
-            $params = [];
+        if(!isset(static::$routes[$requestMethod])) abort("Requested Resource Not Found");
 
-            if ($requestMethod === $route["method"] && self::match($route["uri"], $requestUri, $params)) {
-                // Pass the extracted parameters to callAction
-                return self::callAction($route["action"], $params);
+        foreach (static::$routes[$requestMethod] as $route) {
+            $params = [];
+            if (static::match($route->uri, $requestUri, $params)) {
+                return $route->setParams($params);
             }
         }
 
@@ -70,26 +97,14 @@ class Router {
         return false;
     }
 
-    /**
-     * Calls the method of the controller class provided with params.
-     * @param array $action
-     * @param array $params
-     * @return mixed
-     * @throws \Exception
-     */
-    protected static function callAction(array $action, array $params)
+    public static function group(Closure $group): RouteGroup
     {
-        list ($class, $method) = $action;
-        //Todo: should create specific exception classes for these
-        if(!class_exists($class)) {
-            throw new \Exception("Class $class not found");
-        }
-
-        if(!method_exists($class, $method)) {
-            throw new \Exception("Method $method not found on class $class");
-        }
-
-        return (new $class())->$method(...$params);
+        $createGroup = function() use($group){
+            $group();
+            array_pop(static::$routeGroups);
+        };
+        static::$routeGroups[] = new RouteGroup($createGroup);
+        return end(static::$routeGroups);
     }
 
 

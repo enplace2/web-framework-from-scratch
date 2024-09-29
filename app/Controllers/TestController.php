@@ -3,19 +3,19 @@ namespace app\Controllers;
 class TestController{
     public function test()
     {
-        dd("HELLO");
+        return("HELLO");
     }
 
     public function test2()
     {
-        dd("WORLD");
+        return("WORLD");
     }
 
     public function testWildCard($id){
-        dd($id);
+        return($id);
     }
     public function testWildCard2($id, $id2){
-        dd([$id, $id2]);
+        return([$id, $id2]);
     }
 
     public function stringResponse()

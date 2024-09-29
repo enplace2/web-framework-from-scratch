@@ -2,16 +2,15 @@
 
 namespace Core\Kernel;
 
+use Closure;
 use Core\Container\Container;
+use Core\Pipeline\Pipeline;
 use Core\Response\Response;
 use Core\Router\Router;
 
 class Kernel
 {
-    // make a request instance
-    // handle the request
-    // send the request
-    protected $response;
+    protected Response $response;
 
     protected static Container $container;
 
@@ -20,7 +19,8 @@ class Kernel
         self::$container = $container;
     }
 
-    public static function container(){
+    public static function container(): Container
+    {
         return self::$container;
     }
 
@@ -28,7 +28,14 @@ class Kernel
     {
         $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
         $method = $_SERVER["REQUEST_METHOD"];
-        $this->response = Response::make(Router::resolve($uri, $method));
+
+        $route = Router::resolve($uri, $method);
+
+        (new Pipeline())->run($route->getAction())
+            ->through($route->gatherMiddleware())
+            ->send()
+            ->then($this->setResponse());
+
         return $this;
     }
 
@@ -36,5 +43,13 @@ class Kernel
     {
         $this->response->send();
     }
+
+    protected function setResponse(): Closure
+    {
+        return function (Response $response) {
+            $this->response = $response;
+        };
+    }
+
 
 }
