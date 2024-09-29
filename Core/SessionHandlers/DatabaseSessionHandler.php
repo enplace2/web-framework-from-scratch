@@ -7,7 +7,7 @@ use SessionHandlerInterface;
 class DatabaseSessionHandler implements SessionHandlerInterface
 {
     protected Database $db;
-
+    //Todo: need to integrate this with .env configs so that the table is dynamic
     public function __construct(Database $db)
     {
         $this->db = $db;
