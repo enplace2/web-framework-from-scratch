@@ -40,7 +40,7 @@ class RegisterUser
             throw new \Exception("Invalid email format", 404);
         }
 
-        // Check if email already exists (you'll need to implement this function)
+        // Check if email already exists
         $existingUser = User::findByEmail($this->email);
         if ($existingUser) {
             throw new \Exception("Email already in use ", 404);
