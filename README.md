@@ -1,5 +1,5 @@
 # PHP Micro‑Framework From Scratch
-This is a pet project of mine, to build a lightweight MVC‑style framework with nothing more than PHP’s standard library. Every component—from autoloading to the service container—has been implemented manually as an exercise in building the mechanics normally provided out-of-the-box by frameworks and libraries.
+This is a pet project of mine, to build a lightweight Laravel/MVC‑style framework with nothing more than PHP’s standard library. Every component—from autoloading to the service container—has been implemented manually as an exercise in building the mechanics normally provided out-of-the-box by frameworks and libraries.
 
 ## Current features 
 
